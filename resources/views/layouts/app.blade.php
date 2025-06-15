@@ -1,179 +1,305 @@
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-		<title>Madurai Kadai</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="{{ asset('assets/style.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome-free/css/all.min.css') }}">
-		<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/jqvmap/jqvmap.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/daterangepicker/daterangepicker.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/summernote/summernote-bs4.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/daterangepicker/daterangepicker.css') }}">
-		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-		<!-- Select 2 Css -->
-		<link rel="stylesheet" href="{{ asset('assets/plugins/select2/css/select2.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
-		<!-- Include Bootstrap Select CSS -->
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css" rel="stylesheet">
-		<!-- jQuery -->
-		<script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
-	</head>
-	<body class="hold-transition sidebar-mini layout-fixed">
-		<div class="wrapper">
-			@include('layouts.header')
-			@include('layouts.sidebar')
-			@yield('content')
-			@include('layouts.footer')
-			<aside class="control-sidebar control-sidebar-dark">
-			</aside>
-		</div>
-		<script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
-		<script> $.widget.bridge('uibutton', $.ui.button); </script>
-		<script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-		<script src="{{ asset('assets/plugins/chart.js/Chart.min.js') }}"></script>
-		<script src="{{ asset('assets/plugins/sparklines/sparkline.js') }}"></script>
-		<!-- <script src="{{ asset('assets/plugins/jqvmap/jquery.vmap.min.js') }}"></script> -->
-		<!-- <script src="{{ asset('assets/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script> -->
-		<script src="{{ asset('assets/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
-		<script src="{{ asset('assets/plugins/moment/moment.min.js') }}"></script>
-		<script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
-		<script src="{{ asset('assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-		<script src="{{ asset('assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
-		<script src="{{ asset('assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
-		<script src="{{ asset('assets/dist/js/adminlte.js') }}"></script>
-		<script src="{{ asset('assets/dist/js/pages/dashboard.js') }}"></script>
-		<script src="{{ asset('assets/dist/js/demo.js') }}"></script>
-		<script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
-			
-		<!-- Toaster -->
-		<script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
-		{!! Toastr::message() !!}
-		<link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
-		<!-- Toaster -->
-        <!-- DataTables -->
-		<link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
-<script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script> 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
-<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-<!-- Select 2 -->
-<script src="{{asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>
+    <link href="{!! asset('theme/vendor/bootstrap/css/bootstrap.min.css') !!}" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="{!! asset('theme/vendor/metisMenu/metisMenu.min.css') !!}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{!! asset('theme/dist/css/sb-admin-2.css') !!}" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="{!! asset('theme/vendor/morrisjs/morris.css') !!}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+    <!-- Custom Fonts -->
+    <link href="{!! asset('theme/vendor/font-awesome/css/font-awesome.min.css') !!}" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        body{
+            overflow-x: hidden;
+        }.badge-info {
+    color: #fff;
+    background-color: #17a2b8;
+}
+.badge-danger {
+    color: #fff;
+    background-color: #dc3545;
+}
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+    </style>
+
+</head>
+<body>
+    
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            @include('theme.header')
+            @include('theme.sidebar')
+        </nav>
+
+        <div id="page-wrapper">
+            @yield('content')
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>  
+    
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+    function exportTableToExcel(tableID, filename = '') {
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
+        var tableSelect = document.getElementById(tableID);
+        var tableHTML = '<table><thead><tr>';
+
+        // Iterate through each column in the table and append the header to the tableHTML string
+        for (var i = 0; i < tableSelect.rows[0].cells.length; i++) {
+            if (tableSelect.rows[0].cells[i].innerText !== 'Action') {
+                tableHTML += '<th>' + tableSelect.rows[0].cells[i].innerHTML + '</th>';
+            }
+        }
+
+        // Close the thead and open tbody
+        tableHTML += '</tr></thead><tbody>';
+
+        // Iterate through each row in the table and append the cells to the tableHTML string
+        for (i = 1; i < tableSelect.rows.length; i++) {
+            tableHTML += '<tr>';
+            for (var j = 0; j < tableSelect.rows[i].cells.length; j++) {
+                if (tableSelect.rows[0].cells[j].innerText !== 'Action') {
+                    tableHTML += '<td>' + tableSelect.rows[i].cells[j].innerHTML + '</td>';
+                }
+            }
+            tableHTML += '</tr>';
+        }
+
+        // Close the tbody and table tags
+        tableHTML += '</tbody></table>';
+
+        // Specify file name
+        filename = filename ? filename + '.xls' : 'excel_data.xls';
+
+        // Create download link element
+        downloadLink = document.createElement("a");
+
+        document.body.appendChild(downloadLink);
+
+        if (navigator.msSaveOrOpenBlob) {
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            // Create a link to the file
+            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+            // Setting the file name
+            downloadLink.download = filename;
+
+            // Triggering the function
+            downloadLink.click();
+        }
+    }
+</script>
+
+   <script>
+        function Delete(value) {
+          if (confirm("Are you sure you want to delete?")) {
+            $.ajax({
+              type: 'get',
+              url: '{{ route('department.delete') }}',
+              data: { id: value },
+              success: function(data) {
+                // Show success message
+                alert('Department deleted successfully.');
+
+                // Reload the current page
+                window.location.reload();
+              },
+              error: function(xhr, status, error) {
+                // Show error message
+                alert('Failed to delete department.');
+
+                // Log the error to the console
+                console.error(error);
+              }
+            });
+          }
+        }
+    </script>
+    <script>
+        function Deletesupplyzone(value) {
+          if (confirm("Are you sure you want to delete?")) {
+            $.ajax({
+              type: 'get',
+              url: '{{ route('supplyzone.delete') }}',
+              data: { id: value },
+              success: function(data) {
+                // Show success message
+                alert('supplyzone deleted successfully.');
+
+                // Reload the current page
+                window.location.reload();
+              },
+              error: function(xhr, status, error) {
+                // Show error message
+                alert('Failed to delete supplyzone.');
+
+                // Log the error to the console
+                console.error(error);
+              }
+            });
+          }
+        }
+    </script>
+    <script>
+        function Deletesupplyarea(value) {
+          if (confirm("Are you sure you want to delete?")) {
+            $.ajax({
+              type: 'get',
+              url: '{{ route('supplyarea.delete') }}',
+              data: { id: value },
+              success: function(data) {
+                // Show success message
+                alert('supplyarea deleted successfully.');
+
+                // Reload the current page
+                window.location.reload();
+              },
+              error: function(xhr, status, error) {
+                // Show error message
+                alert('Failed to delete supplyarea.');
+
+                // Log the error to the console
+                console.error(error);
+              }
+            });
+          }
+        }
+    </script>
+    <script>
+        function Deletestaff(value) {
+            if (confirm("Are you sure you want to delete?")) {
+                $.ajax({
+                    type: 'get',
+                    url: '{{ route('staff.delete') }}',
+                    data: { id: value },
+                    success: function(data) {
+                        // Show success message
+                        alert('Staff deleted successfully.');
+
+                        // Reload the current page
+                        window.location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        // Show error message
+                        alert('Failed to delete staff.');
+
+                        // Log the error to the console
+                        console.error(error);
+                    }
+                });
+            }
+        }
+    </script>
+        <script>
+        function DeleteSalaryCalculation(value) {
+          if (confirm("Are you sure you want to delete?")) {
+            $.ajax({
+              type: 'get',
+              url: '{{ route('salary-calculations.delete') }}',
+              data: { id: value },
+              success: function(data) {
+                // Show success message
+                alert('Staff Salary Data deleted successfully.');
+
+                // Reload the current page
+                window.location.reload();
+              },
+              error: function(xhr, status, error) {
+                // Show error message
+                alert('Failed to delete Staff Salary Data.');
+
+                // Log the error to the console
+                console.error(error);
+              }
+            });
+          }
+        }
+    </script>
+    <script>
+      function DeleteMonthlyReports(id, month) {
+        if (confirm("Are you sure you want to delete?")) {
+          $.ajax({
+            type: 'get',
+            url: '{{ route('monthly_reports.delete', ['id' => ':id', 'month' => ':month']) }}'
+                    .replace(':id', id)
+                    .replace(':month', month),
+            success: function(data) {
+              alert('Payroll Generation deleted successfully.');
+              window.location.reload();
+            },
+            error: function(xhr, status, error) {
+              alert('Failed to delete Payroll Generation.');
+              console.error(error);
+            }
+          });
+        }
+      }
+    </script>
+    <script>
+        function DeleteWorkingDays(value) {
+          if (confirm("Are you sure you want to delete?")) {
+            $.ajax({
+              type: 'get',
+              url: '{{ route('working_days.delete') }}',
+              data: { id: value },
+              success: function(data) {
+                // Show success message
+                alert('Monthly Working Days deleted successfully.');
+
+                // Reload the current page
+                window.location.reload();
+              },
+              error: function(xhr, status, error) {
+                // Show error message
+                alert('Failed to delete Monthly Working Days.');
+
+                // Log the error to the console
+                console.error(error);
+              }
+            });
+          }
+        }
+    </script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    $('.alert').alert()
+  })
+</script>
 <script>
       history.pushState(null, null, location.href);
     window.onpopstate = function () {
         history.go(1);
     };</script>
-<script>
-    $(function () {
-      $(".table_data").DataTable({
-        "responsive": true,
-        "autoWidth": false,
-      });
-//       $("#example1").DataTable({
-//         "responsive": true,
-//         "autoWidth": false,
-// 		"searching": true,      
-// 		"paging": false,     
-// 		"pageLength": 100,     
-// 		"lengthMenu": [ [50, 75, 100], [50, 75, 100] ]
-//       });
-
-      $('#example2').DataTable({
-        "autoWidth": false,
-        "responsive": true,
-      });
-      
-      $("#example11").DataTable({
-        "responsive": true,
-        "autoWidth": false,
-      });   
-
-    });
-
-  </script>
-
-
-
-
-
-  <style>
-div#example1_filter {
-    float: right;
-}
-div#export_filter {
-    float: right;
-}
-div#example11_filter {
-    float: right;
-}
-div#example1_paginate {
-    float: right;
-}
-div#export_paginate {
-    float: right;
-}
-div#example11_paginate {
-    float: right;
-}
-
-.add-button {
-    text-align: right;
-}
-
-.form-check {
-    padding-left: 2.25rem !important;
-}
-
-.table
-{
-word-wrap: break-word;
-word-break: break-all;  
-white-space: normal !important;
-text-align: justify;
-}
-
-
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    padding: 0px !important;
-}
-  </style>
-  
-    <script type="text/javascript">
-   
-
-function exportTableToExcel(tableID, filename, fn, dl) {
-       var elt = document.getElementById(tableID);
-       var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
-       return dl ?
-         XLSX.write(wb, { bookType: 'xlsx', bookSST: true, 'xlsx': 'base64' }):
-         XLSX.writeFile(wb, fn || (filename+'.xlsx' ));
-    }
-
-    function exportBiometricToExcel(tableID, filename, fn, dl)
-    {
-        var elt = document.getElementById(tableID);
-       var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
-       console.log(elt,"wb");
-        return dl ?
-        XLSX.write(wb, { bookType: 'xlsx', bookSST: true, 'xlsx': 'base64' }):
-       XLSX.writeFile(wb, fn || (filename+'.xlsx' ));
-    
-    }
-</script>
-	</body>
+</body>
 </html>

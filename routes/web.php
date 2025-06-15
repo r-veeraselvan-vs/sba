@@ -1,373 +1,115 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\AnalyticsController;
-use App\Http\Controllers\Admin\DiscountController;
-use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\SupplyzoneController;
+use App\Http\Controllers\SupplyareaController;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\SalaryCalculationController;
+use App\Http\Controllers\MonthlyReportController;
+use App\Http\Controllers\WorkingDaysController;
+use App\Http\Controllers\ReportsController;
 
-// Home page route start
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/logout', function () {
+    Auth::logout();
 
-// Home page route end
-Route::get('/productList', [HomeController::class, 'productList'])->name('productList');
-Route::get('/product/{id}', [HomeController::class, 'productShow'])->name('product.show');
+    return redirect()->route('login')->with('preventBack', true);
+})->name('logout')->middleware('preventBackHistory');
 
 
-Route::get('/product', function () {
-    return view('front.product'); 
+Route::get('/', function () {
+    return view('welcome');
 });
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-//email login page
-Route::get('/email-login', 'Auth\LoginController@emailLogin')->name('email.login');
-//otp login page
-Route::get('/otp-log-in', 'Auth\LoginController@otpLogin')->name('otp.login');
-Route::post('/otp-send', 'Auth\LoginController@sendOTP')->name('otp.send');
-Route::post('/otp-verify', 'Auth\LoginController@verifyOTP')->name('otp.verify');
-
-
-Route::post('/log-in', 'Auth\LoginController@loginNew')->name('login.new');
-Route::match(['get', 'post'], '/otplog-in', 'Auth\LoginController@otpLoginNew')->name('otplogin.new');
-Auth::routes();
-
-// Social Logins
-Route::get('/login/{provider}', 'Auth\LoginController@redirectToProvider')->name('social.login');
-Route::get('/login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('social.callback');
-
-// Carts
-Route::get('/cart', 'CartController@cart')->name('cart');
-Route::post('/add-cart', 'CartController@addCart')->name('cart.add');
-Route::get('/cart/remove/{cart_id}', 'CartController@removeCart')->name('cart.remove');
-Route::get('/cart/add/{cart_id}', 'CartController@plusOne')->name('cart.plusOne');
-Route::get('/cart/minus/{cart_id}', 'CartController@minusOne')->name('cart.minusOne');
-
-// Route::get('/check-out', 'CartController@proceedCart')->name('cart.checkout');
-
-Route::match(['get', 'post'], '/check-out', 'CartController@proceedCart')->name('cart.checkout');
-
-// Role Redirect Routes
-Route::get('/role', 'RoleController@redirectRoutes')->name('role');
-Route::get('/home', 'RoleController@redirectRoutes');
-
-Route::get('/about-us', 'CommonController@aboutUs');
-Route::get('/contact-us', 'CommonController@contactUs')->name('contact-us');
-Route::post('/contact-us', 'CommonController@sendContact')->name('contact');
-Route::get('/privacy-policy', 'CommonController@privacyPolicy')->name('privacy.policy');
-Route::get('/refund-policy', 'CommonController@refundPolicy')->name('refund.policy');
-Route::get('/terms-conditions', 'CommonController@termsConditions')->name('terms.conditions');
-
-// Admin + Super Admin + Executive Routes
-Route::group([ 'prefix' => 'admin', 'middleware'=> ['auth' => 'Admin']], function () {
-
-    Route::get('/dashboard', 'Admin\DashboardController@dashboard')->name('dashboard');
-    // Analytics
-    Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
-
-    // Report
-    Route::group(['prefix' => 'reports'], function () {
-        // Route to list reports
-        Route::get('/customer','Admin\ReportController@index')->name('reports.index');
-        Route::get('/month/wise', 'Admin\ReportController@monthlyAnalysis')->name('reports.monthly');
-        Route::get('/daily/wise', 'Admin\ReportController@dailyAnalysis')->name('reports.daily');
-        Route::get('/pendingpayment/wise', 'Admin\ReportController@pendingPayment')->name('reports.pendingpayment');
-
-        Route::get('/cutomerdownload/pdf','Admin\ReportController@downloadPdf')->name('customer.download.pdf');
-        Route::get('/monthlydownload/pdf','Admin\ReportController@downloadmonthlyAnalysis')->name('monthly.download.pdf');
-        Route::get('/dailydownload/pdf','Admin\ReportController@downloaddailyAnalysis')->name('daily.download.pdf');
-        Route::get('/pendingpaymentdownload/pdf','Admin\ReportController@downloadpendingPayment')->name('pendingPayment.download.pdf');
-
-    });
-
-    //discount
-    Route::group(['prefix' => 'discount'], function () {
-        Route::get('/index', [DiscountController::class, 'index'])->name('discount.index');
-        Route::post('/create', [DiscountController::class, 'store'])->name('discount.store');
-        Route::get('/edit/{id}', [DiscountController::class, 'edit'])->name('discount.edit');
-        Route::post('/update/{id}', [DiscountController::class, 'update'])->name('discount.update');
-        Route::post('/delete/{id}', [DiscountController::class, 'destroy'])->name('discount.destroy');
-        Route::get('/show/{id}', [DiscountController::class, 'show'])->name('discount.show');
-    });
-
-    // Users
-    Route::group(['prefix' => 'user'], function () {
-        Route::get('/create', 'Admin\UserController@addUser')->name('user.create');
-        Route::post('/save', 'Admin\UserController@saveUser')->name('user.save');
-        Route::get('/list', 'Admin\UserController@listUser')->name('user.list');
-        Route::get('/edit/{user_id}', 'Admin\UserController@editUser')->name('user.edit');
-        Route::post('/update', 'Admin\UserController@updateUser')->name('user.update');
-    });
-
-    // Vendors
-    Route::group(['prefix' => 'vendor'], function () {
-        Route::get('/create', 'Admin\VendorController@add')->name('vendor.create');
-        Route::post('/save', 'Admin\VendorController@save')->name('vendor.save');
-        Route::get('/list', 'Admin\VendorController@list')->name('vendor.list');
-        Route::get('/edit/{vendor_id}', 'Admin\VendorController@edit')->name('vendor.edit');
-        Route::post('/update', 'Admin\VendorController@update')->name('vendor.update');
-        
-      
-    });
-    
-     // Vendors
-    Route::group(['prefix' => 'vendors-product'], function () {
-        Route::get('/', 'Admin\VendorsProductController@index')->name('vendors-product.list');
-        Route::get('/create', 'Admin\VendorsProductController@create')->name('vendors-product.create');
-        Route::post('/save', 'Admin\VendorsProductController@save')->name('vendors-product.save');
-        Route::get('/edit/{vendor_id}', 'Admin\VendorsProductController@edit')->name('vendors-product.edit');
-        Route::put('/vendors-product/{id}', 'Admin\VendorsProductController@update')->name('vendors-product.update');
-        Route::delete('/vendors-product/{id}', 'Admin\VendorsProductController@destroy')->name('vendors-product.destroy');
-    });
-
-     
-    // Category
-    Route::group(['prefix' => 'category'], function () {
-        Route::get('/list', 'Admin\CategoryController@list')->name('category.list');
-        Route::post('/save', 'Admin\CategoryController@save')->name('category.save');
-        Route::get('/edit/{id}', 'Admin\CategoryController@edit')->name('category.edit');
-        Route::post('/update', 'Admin\CategoryController@update')->name('category.update');
-    });
-
-    // Sub Category
-    Route::group(['prefix' => 'subcategory'], function () {
-        Route::get('/list', 'Admin\SubcategoryController@list')->name('subcategory.list');
-        Route::post('/save', 'Admin\SubcategoryController@save')->name('subcategory.save');
-        Route::get('/edit/{id}', 'Admin\SubcategoryController@edit')->name('subcategory.edit');
-        Route::post('/update', 'Admin\SubcategoryController@update')->name('subcategory.update');
-    });
-
-    // Banner
-    Route::group(['prefix' => 'banner'], function () {
-        Route::get('/list', 'Admin\BannerController@list')->name('banner.list');
-        Route::post('/save', 'Admin\BannerController@save')->name('banner.save');
-        Route::get('/edit/{id}', 'Admin\BannerController@edit')->name('banner.edit');
-        Route::post('/update', 'Admin\BannerController@update')->name('banner.update');
-    });
-
-    // Mobile Banner
-    Route::group(['prefix' => 'mobile-banner'], function () {
-        Route::get('/list', 'Admin\MobileBannerController@list')->name('mobile.banner.list');
-        Route::post('/save', 'Admin\MobileBannerController@save')->name('mobile.banner.save');
-        Route::get('/edit/{id}', 'Admin\MobileBannerController@edit')->name('mobile.banner.edit');
-        Route::post('/update', 'Admin\MobileBannerController@update')->name('mobile.banner.update');
-    });
-    
-    // News
-    Route::group(['prefix' => 'news'], function () {
-        Route::get('/list', 'Admin\NewsController@list')->name('news.list');
-        Route::post('/save', 'Admin\NewsController@save')->name('news.save');
-        Route::get('/edit/{id}', 'Admin\NewsController@edit')->name('news.edit');
-        Route::post('/update', 'Admin\NewsController@update')->name('news.update');
-    });
-    
-    // Products
-    Route::group(['prefix' => 'product'], function () {
-
-        Route::get('/list', 'Admin\ProductController@list')->name('product.list');
-        Route::match(['get', 'post'], '/save', 'Admin\ProductController@save')->name('product.save');
-        Route::get('/edit/{id}/{tab}/{page}', 'Admin\ProductController@edit')->name('product.edit');
-        Route::put('/update/{id}', 'Admin\ProductController@update')->name('product.update');
-        Route::post('/export', 'Admin\ProductController@export')->name('product.export');
-        Route::any('/import', 'Admin\ProductController@exportUpdate')->name('product.import');
-        
-         Route::get('/view/bulk/update', 'Admin\ProductController@productViewBulkUpdate')->name('product.ViewBulkUpdate');
-
-        Route::post('/bulk/update', 'Admin\ProductController@productBulkUpdate')->name('product.BulkUpdate');
-        
-        Route::post('/image/bulk/update', 'Admin\ProductController@uploadImages')->name('product.image.BulkUpdate');
-            Route::post('/json/bulk/update', 'Admin\ProductController@productJSONBulkUpdate')->name('product.json.BulkUpdate');
-        
-        Route::get('/delete/{id}', 'Admin\ProductController@delete')->name('product.delete');
-        
-        // Price
-        Route::group(['prefix' => 'price'], function () {
-            Route::put('/update', 'Admin\ProductPriceController@update')->name('product.price.update');
-            Route::get('/delete/{id}', 'Admin\ProductPriceController@delete')->name('product.price.delete');
-        });
-       
-        // Specification
-        Route::group(['prefix' => 'specification'], function () {
-            Route::put('/update', 'Admin\ProductSpecificationController@update')->name('product.specification.update');
-            Route::get('/delete/{id}', 'Admin\ProductSpecificationController@delete')->name('product.specification.delete');
-        });
-        
-        // Feature
-        Route::group(['prefix' => 'feature'], function () {
-            Route::put('/update', 'Admin\ProductFeatureController@update')->name('product.feature.update');
-            Route::get('/delete/{id}', 'Admin\ProductFeatureController@delete')->name('product.feature.delete');
-        });
-        
-        // Image
-        Route::group(['prefix' => 'image'], function () {
-            Route::put('/update', 'Admin\ProductImageController@update')->name('product.image.update');
-            Route::get('/delete/{id}', 'Admin\ProductImageController@delete')->name('product.image.delete');
-        });
-           
-    });
-             
-    // Delivery Area
-    Route::group(['prefix' => 'delivery-area'], function () {
-        Route::get('/list', 'Admin\DeliveryAreaController@list')->name('delivery.area.list');
-        Route::post('/save', 'Admin\DeliveryAreaController@save')->name('delivery.area.save');
-        Route::get('/edit/{id}/{tab}', 'Admin\DeliveryAreaController@edit')->name('delivery.area.edit');
-        Route::post('/update', 'Admin\DeliveryAreaController@update')->name('delivery.area.update');
-        Route::post('/slot/update', 'Admin\DeliveryAreaController@updateSlots')->name('delivery.area.slot.update');
-    });
-    
-    // Delivery Slot
-    Route::group(['prefix' => 'delivery-slot'], function () {
-        Route::get('/list', 'Admin\DeliverySlotController@list')->name('delivery.slot.list');
-        Route::post('/save', 'Admin\DeliverySlotController@save')->name('delivery.slot.save');
-        Route::get('/edit/{id}', 'Admin\DeliverySlotController@edit')->name('delivery.slot.edit');
-        Route::post('/update', 'Admin\DeliverySlotController@update')->name('delivery.slot.update');
-    });
-
-     // Promo Code
-     Route::group(['prefix' => 'promo-code'], function () {
-        Route::get('/list', 'Admin\PromoCodeController@index')->name('promocode.list');
-        Route::post('/save', 'Admin\PromoCodeController@store')->name('promocode.store');
-        Route::get('/edit/{id}', 'Admin\PromoCodeController@edit')->name('promocode.edit');
-        Route::post('/update/{id}', 'Admin\PromoCodeController@update')->name('promocode.update');        
-    });
-
-     // Order
-    Route::group(['prefix' => 'order'], function () {
-        Route::get('/list', 'Admin\OrderController@list')->name('order.list');
-        Route::get('/detail/{id}/{type}', 'Admin\OrderController@details')->name('order.detail');
-        Route::get('/download/{id}', 'Admin\OrderController@downloadHtml')->name('order.download.html');
-        Route::post('/update/{id}', 'Admin\OrderController@update')->name('order.update');
-        Route::get('/invoice/{id}', 'Admin\OrderController@viewPdf')->name('order.invoice.pdf');
-        Route::any('/summary', 'Admin\OrderController@summary')->name('order.summary');
-        
-        // Customer orders
-        
-        Route::group(['prefix' => 'customer'], function () {
-            Route::get('/', 'Admin\OrderController@customers')->name('order.customers');
-            Route::get('/view/{id}', 'Admin\OrderController@customerOrderView')->name('order.customer.view');
-        });
-    });
-
-    // Requested Products
-    Route::group(['prefix' => 'requestedproducts'], function () {
-        Route::any('/summary', 'Admin\OrderController@requestedproductssummary')->name('requestedproducts.summary');
-    });
-    
-    // Reviews
-    Route::group(['prefix' => 'review'], function () {
-        Route::get('/list', 'Admin\ReviewController@list')->name('review.list');
-        Route::get('/delete/{product_id}/{id}', 'Admin\ReviewController@delete')->name('review.delete');
-        Route::get('/update/{product_id}/{id}/{status}', 'Admin\ReviewController@update')->name('review.update');
-    });
-
-    // Customer
-    Route::group(['prefix' => 'customer'], function () {
-        Route::get('/list', 'Admin\CustomerController@list')->name('customer.list');
-        Route::get('/view/{customer_id}', 'Admin\CustomerController@view')->name('customer.view');
-        Route::get('/edit/{user_id}', 'Admin\CustomerController@edit')->name('customer.edit');
-        Route::post('/update', 'Admin\CustomerController@update')->name('customer.update');
-    });
-
-    // Rider
-    Route::group(['prefix' => 'rider'], function () {
-        Route::get('/create', 'Admin\RiderController@addRider')->name('rider.create');
-        Route::post('/save', 'Admin\RiderController@saveRider')->name('rider.save');
-        Route::get('/list', 'Admin\RiderController@list')->name('rider.list');
-        Route::get('/view/{rider_id}', 'Admin\RiderController@view')->name('rider.view');
-    });
-
-    // Notifications    
-    Route::group(['prefix' => 'notification'], function () {
-        Route::post('/save', 'NotificationController@saveNotification')->name('notification.save');
-        Route::get('/group/{type}', 'NotificationController@groupNotification')->name('notification.group');
-        Route::post('/group/tag/{type}', 'NotificationController@groupNotificationTag')->name('notification.group.tag');
-        Route::post('/group/{type}', 'NotificationController@groupNotificationFromMap')->name('notification.group.map');
-        Route::get('/rider/send/{id}', 'NotificationController@riderNotification')->name('notification.rider');
-        Route::get('/customer/send/{id}', 'NotificationController@customerNotification')->name('notification.customer');
-        Route::get('/rider/send/{id}', 'NotificationController@riderNotification')->name('notification.rider');
-    });
-
-    // Settings
-    Route::group(['prefix' => 'settings'], function () {
-        Route::get('/edit', 'Admin\SettingsController@edit')->name('setting.edit');
-        Route::post('/save', 'Admin\SettingsController@save')->name('setting.save');
-        Route::post('/upadte', 'Admin\SettingsController@update')->name('setting.update');
-    });
-
-    // Billing
-    Route::group(['prefix' => 'billing'], function () {
-        Route::post('/', 'Admin\BillingController@billing')->name('billing');
-        Route::get('/add', 'Admin\BillingController@add')->name('billing.add');
-        Route::get('/customers', 'Admin\BillingController@customers')->name('billing.customers');
-        Route::get('/customer/{id}', 'Admin\BillingController@customer')->name('billing.customer');
-        Route::get('/shipping/{id}/{sub_total}', 'Admin\BillingController@checkShipping')->name('billing.shipping');
-        Route::post('/create-user', 'Admin\BillingController@createUser')->name('billing.create.user');
-        Route::post('/create-address', 'Admin\BillingController@createAddress')->name('billing.create.address');
-    });
-
-});
-
-
-// Customer Routes
-Route::group([ 'prefix' => 'customer', 'middleware'=> ['auth' => 'Customer']], function () {
-    Route::get('/profile', 'Customer\DashboardController@profile')->name('customer.profile');
-    Route::post('/profile', 'Customer\DashboardController@profileUpdate')->name('customer.profile.update');
-    Route::get('/orders', 'Customer\DashboardController@orders')->name('customer.orders');
-    Route::get('/wishlist', 'Customer\DashboardController@wishlist')->name('customer.wishlist');
-    Route::get('/orderdetails/{id}', 'Customer\DashboardController@orderdetails')->name('customer.orderdetails');
-    Route::get('/downloads', 'Customer\DashboardController@downloads')->name('customer.downloads');
-    Route::get('/my-address', 'Customer\DashboardController@address')->name('customer.address');
-    Route::get('/my-address/remove/{id}', 'Customer\DashboardController@deleteAddress')->name('customer.address.remove');
-    Route::get('/edit/{id}/{type}', 'Customer\DashboardController@editAddress')->name('customer.address.edit');
-    Route::post('/my-address/update', 'Customer\DashboardController@updateAddress')->name('customer.address.update');
-    
-    // Wishlist
-    Route::get('/wishlist/{product_id}/{type}', 'Customer\WishListController@add')->name('wishlist.add');
-    
-    // Carts
-    Route::get('/checkout', 'CartController@proceedCart')->name('cart.order.checkout');
-    Route::get('/place-order', 'CartController@placeOrder')->name('cart.order.place');
-    Route::get('/select-address', 'CartController@selectAddress')->name('customer.address.select');
-    Route::post('/add-address', 'CartController@addAddress')->name('customer.address.add');
-    Route::post('/add-mobile', 'CartController@addMobile')->name('customer.mobile.add');
-    Route::get('/address-fare-update/{id}', 'CartController@updateAdressAndFare')->name('cart.order.update.address-fare');
-    Route::any('/summary/{id}', 'CartController@summary')->name('customer.cart.summary');
-
-    // Payment
-    Route::post('/cod/{order_id}', 'Customer\PaymentController@cashOnDelivery')->name('cart.payment.cod');
-    Route::post('/payment', 'Customer\PaymentController@payment')->name('cart.payment.online');
-    Route::post('/update-delivery-fields', 'Customer\PaymentController@updateDeliveryFields')->name('update.delivery.fields');
-
-});
-
-
-// Review
-Route::get('/review', 'ReviewController@review')->name('customer.review');
-
-// Auth Free Routes
-Route::get('/oldhome', 'HomeController@home')->name('oldhome');
-Route::get('/product/{menu}/{slug}/{sub_slug}', 'HomeController@products')->name('products');
-Route::get('/product/{price_id}/{slug}', 'HomeController@product')->name('product.details');
-Route::get('/search', 'HomeController@searchProducts')->name('product.search');
-
-// Route::get('/clear', function () {
-//     Artisan::call('view:clear');
-//     Artisan::call('config:cache');
-//     Artisan::call('storage:link');
-//     echo 'done';
-// });
-
  Route::get('autologin', function () {
         $email = $_GET['email'];
-        $user = \App\User::where('email', $email)->first();
+        $user = \App\Models\User::where('email', $email)->first();
         Auth::login($user, true);
-        return redirect()->intended('/admin/dashboard');
+        return redirect()->intended('/department/list');
     });
- Route::post('/user/logout', '\App\Http\Controllers\HomeController@userlogout')->name('user.logout');
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::prefix('department')->middleware(['auth'])->group(function(){
+    Route::get('/list', [DepartmentController::class, 'list'])->name('department.list');
+    Route::get('/create', [DepartmentController::class, 'create'])->name('department.create');
+    Route::post('/save', [DepartmentController::class, 'save'])->name('department.save');
+    Route::get('/edit/{id}',[DepartmentController::class, 'edit'])->name('department.edit');
+    Route::post('/update', [DepartmentController::class, 'update'])->name('department.update');
+    Route::get('/delete', [DepartmentController::class, 'delete'])->name('department.delete');
+});
+
+Route::prefix('supplyzone')->middleware(['auth'])->group(function(){
+    Route::get('/list', [SupplyzoneController::class, 'list'])->name('supplyzone.list');
+    Route::get('/create', [SupplyzoneController::class, 'create'])->name('supplyzone.create');
+    Route::post('/save', [SupplyzoneController::class, 'save'])->name('supplyzone.save');
+    Route::get('/edit/{id}',[SupplyzoneController::class, 'edit'])->name('supplyzone.edit');
+    Route::post('/update', [SupplyzoneController::class, 'update'])->name('supplyzone.update');
+    Route::get('/delete', [SupplyzoneController::class, 'delete'])->name('supplyzone.delete');
+});
+
+Route::prefix('supplyarea')->middleware(['auth'])->group(function(){
+    Route::get('/list', [SupplyareaController::class, 'list'])->name('supplyarea.list');
+    Route::get('/create', [SupplyareaController::class, 'create'])->name('supplyarea.create');
+    Route::post('/save', [SupplyareaController::class, 'save'])->name('supplyarea.save');
+    Route::get('/edit/{id}',[SupplyareaController::class, 'edit'])->name('supplyarea.edit');
+    Route::post('/update', [SupplyareaController::class, 'update'])->name('supplyarea.update');
+    Route::get('/delete', [SupplyareaController::class, 'delete'])->name('supplyarea.delete');
+});
+
+Route::prefix('staff')->middleware(['auth'])->group(function(){
+    Route::get('/list', [StaffController::class, 'list'])->name('staff.list');
+    Route::get('/create', [StaffController::class, 'create'])->name('staff.create');
+    Route::post('/save', [StaffController::class, 'save'])->name('staff.save');
+    Route::get('/edit/{id}',[StaffController::class, 'edit'])->name('staff.edit');
+    Route::post('/update/{id}', [StaffController::class, 'update'])->name('staff.update');
+    Route::get('/delete', [StaffController::class, 'delete'])->name('staff.delete');
+});
+
+Route::prefix('salary-calculations')->middleware(['auth'])->group(function(){
+    Route::get('/list', [SalaryCalculationController::class, 'list'])->name('salary-calculations.list');
+    Route::get('/create', [SalaryCalculationController::class, 'create'])->name('salary-calculations.create');
+    Route::post('/save', [SalaryCalculationController::class, 'save'])->name('salary-calculations.save');
+    Route::get('/edit/{id}',[SalaryCalculationController::class, 'edit'])->name('salary-calculations.edit');
+    Route::post('/update/{id}', [SalaryCalculationController::class, 'update'])->name('salary-calculations.update');
+    Route::get('/delete', [SalaryCalculationController::class, 'delete'])->name('salary-calculations.delete');
+});
+
+Route::prefix('monthly_reports')->middleware(['auth'])->group(function(){
+    Route::get('/list', [MonthlyReportController::class, 'list'])->name('monthly_reports.list');
+    Route::get('/create', [MonthlyReportController::class, 'create'])->name('monthly_reports.create');
+    Route::post('/save', [MonthlyReportController::class, 'save'])->name('monthly_reports.save');
+    Route::get('/edit/{id}',[MonthlyReportController::class, 'edit'])->name('monthly_reports.edit');
+    Route::post('/update/{id}', [MonthlyReportController::class, 'update'])->name('monthly_reports.update');
+    Route::get('/delete/{id}/{month}', [MonthlyReportController::class, 'delete'])->name('monthly_reports.delete');
+    //-------without pf----//
+    Route::get('/payslip/{staff_id}/{id}/{month}', [MonthlyReportController::class, 'payslip'])->name('monthly_reports.payslip');
+    Route::get('/generate/{staff_id}/{id}/{month}', [MonthlyReportController::class, 'generate'])->name('payslips.generate');
+    Route::post('/calculate/payslip', [MonthlyReportController::class, 'calculate'])->name('calculate.payslip'); 
+    Route::get('/download/{staff_id}/{id}/{month}', [MonthlyReportController::class, 'downloadPayslip'])->name('download.payslip');
+    //-------with pf-----//
+    Route::get('/payslipwithpf/{staff_id}/{id}/{month}', [MonthlyReportController::class, 'payslipwithpf'])->name('monthly_reports.payslipwithpf');
+    Route::get('/payslipwithpf/generate/{staff_id}/{id}/{month}', [MonthlyReportController::class, 'generate'])->name('payslips.generate');
+    Route::post('/payslipwithpf/calculate/payslip', [MonthlyReportController::class, 'calculatewithpf'])->name('calculate.payslipwithpf'); 
+    Route::get('/payslipwithpf/download/{staff_id}/{id}/{month}', [MonthlyReportController::class, 'downloadPayslipwithpf'])->name('download.payslipwithpf');
+});
+
+Route::prefix('working_days')->middleware(['auth'])->group(function(){
+    Route::get('/list', [WorkingDaysController::class, 'list'])->name('working_days.list');
+    Route::get('/create', [WorkingDaysController::class, 'create'])->name('working_days.create');
+    Route::post('/save', [WorkingDaysController::class, 'save'])->name('working_days.save');
+    Route::get('/edit/{id}',[WorkingDaysController::class, 'edit'])->name('working_days.edit');
+    Route::post('/update/{id}', [WorkingDaysController::class, 'update'])->name('working_days.update');
+    Route::get('/delete', [WorkingDaysController::class, 'delete'])->name('working_days.delete');
+});
+
+Route::prefix('reports')->middleware(['auth'])->group(function(){
+    Route::get('/slbob', [ReportsController::class, 'slbob'])->name('reports.slbob');
+    Route::get('/sloba', [ReportsController::class, 'sloba'])->name('reports.sloba');
+    Route::get('/slwithpf', [ReportsController::class, 'slwithpf'])->name('reports.slwithpf');
+    Route::get('/slwithoutpf', [ReportsController::class, 'slwithoutpf'])->name('reports.slwithoutpf');
+    Route::get('/excel_report', [ReportsController::class, 'excel_report'])->name('reports.excel_report');
+    Route::get('/excel_report_edit/{id}', [ReportsController::class, 'excel_report_edit'])->name('reports.excel_report_edit');
+    Route::post('/excel_report_edit/{update}', [ReportsController::class, 'excel_report_update'])->name('reports.excel_report_update');
+});

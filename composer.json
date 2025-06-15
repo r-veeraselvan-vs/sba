@@ -7,16 +7,12 @@
     "require": {
         "php": "^7.4",
         "barryvdh/laravel-dompdf": "^2.0",
-        "brian2694/laravel-toastr": "*",
-        "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "7.0",
+        "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
-        "laravel/passport": "*",
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.5",
-        "laravel/ui": "^3.4",
-        "orangehill/iseed": "*"
+        "laravel/ui": "^3.4"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -66,9 +62,9 @@
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
         },
-        "platform": {
+         "platform": {
             "php": "7.4.21"
-        }
+         }
     },
     "minimum-stability": "stable",
     "prefer-stable": true
