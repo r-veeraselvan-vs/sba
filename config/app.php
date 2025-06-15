@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Madurai Kadai'),
+    'name' => env('APP_NAME', 'MaduraiKadai'),
 
     /*
     |--------------------------------------------------------------------------
@@ -27,21 +27,6 @@ return [
     */
 
     'env' => env('APP_ENV', 'production'),
-    'stripe_key' => env('STRIPE_KEY', ''),
-    'stripe_secret' => env('STRIPE_SECRET', ''),
-    /*
-    |--------------------------------------------------------------------------
-    | Google Map Api Key
-    |--------------------------------------------------------------------------
-    |
-    | This value determines the "environment" your application is currently
-    | running in. This may determine how you prefer to configure various
-    | services the application utilizes. Set this in your ".env" file.
-    |
-    */
-
-    'google_map_api_key' => env('GOOGLE_MAP_API_KEY', ''),
-    'google_map_customer_api_key' => env('GOOGLE_MAP_CUSTOMER_API_KEY', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -54,7 +39,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+    'debug' => (bool) env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -71,38 +56,6 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
-	/*
-    |--------------------------------------------------------------------------
-    | SMS Configration
-    |--------------------------------------------------------------------------
-    |
-    */
-
-    'sms_key' => env('SMS_KEY', null),
-    'sms_template_id' => env('SMS_TEMPLATE_ID', null),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Order Configration
-    |--------------------------------------------------------------------------
-    |
-    */
-
-    'minimum_order' => env('ORDER_MINIMUM', 800),
-    
-    /*
-    |--------------------------------------------------------------------------
-    | FCM Configration
-    |--------------------------------------------------------------------------
-    |
-    */
-
-    'customer_fcm_server_key' => env('CUSTOMER_FCM_SERVER_KEY', null),
-    'customer_fcm_sender_id' => env('CUSTOMER_FCM_SENDER_ID', null),
-
-    'rider_fcm_server_key' => env('RIDER_FCM_SERVER_KEY', null),
-    'rider_fcm_sender_id' => env('RIDER_FCM_SENDER_ID', null),
-
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -114,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'Asia/Kolkata',
+    'timezone' => 'UTC',
 
     /*
     |--------------------------------------------------------------------------
@@ -208,14 +161,10 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-
-        /*
+         /*
          * Package Service Providers...
          */
-        Orangehill\Iseed\IseedServiceProvider::class,
-        Brian2694\Toastr\ToastrServiceProvider::class,
-        Laravel\Passport\PassportServiceProvider::class,
-        // Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -251,6 +200,7 @@ return [
         'Config' => Illuminate\Support\Facades\Config::class,
         'Cookie' => Illuminate\Support\Facades\Cookie::class,
         'Crypt' => Illuminate\Support\Facades\Crypt::class,
+        'Date' => Illuminate\Support\Facades\Date::class,
         'DB' => Illuminate\Support\Facades\DB::class,
         'Eloquent' => Illuminate\Database\Eloquent\Model::class,
         'Event' => Illuminate\Support\Facades\Event::class,
@@ -258,14 +208,16 @@ return [
         'Gate' => Illuminate\Support\Facades\Gate::class,
         'Hash' => Illuminate\Support\Facades\Hash::class,
         'Http' => Illuminate\Support\Facades\Http::class,
+        'Js' => Illuminate\Support\Js::class,
         'Lang' => Illuminate\Support\Facades\Lang::class,
         'Log' => Illuminate\Support\Facades\Log::class,
         'Mail' => Illuminate\Support\Facades\Mail::class,
         'Notification' => Illuminate\Support\Facades\Notification::class,
         'Password' => Illuminate\Support\Facades\Password::class,
         'Queue' => Illuminate\Support\Facades\Queue::class,
+        'RateLimiter' => Illuminate\Support\Facades\RateLimiter::class,
         'Redirect' => Illuminate\Support\Facades\Redirect::class,
-        'Redis' => Illuminate\Support\Facades\Redis::class,
+        // 'Redis' => Illuminate\Support\Facades\Redis::class,
         'Request' => Illuminate\Support\Facades\Request::class,
         'Response' => Illuminate\Support\Facades\Response::class,
         'Route' => Illuminate\Support\Facades\Route::class,
@@ -276,8 +228,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Toastr'  => Brian2694\Toastr\Facades\Toastr::class,
-        'Stripe' => Cartalyst\Stripe\Laravel\Facades\Stripe::class,
+
     ],
 
 ];

@@ -1,179 +1,228 @@
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-		<title>Madurai Kadai</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="{{ asset('assets/style.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome-free/css/all.min.css') }}">
-		<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/jqvmap/jqvmap.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/daterangepicker/daterangepicker.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/summernote/summernote-bs4.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/daterangepicker/daterangepicker.css') }}">
-		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-		<!-- Select 2 Css -->
-		<link rel="stylesheet" href="{{ asset('assets/plugins/select2/css/select2.min.css') }}">
-		<link rel="stylesheet" href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
-		<!-- Include Bootstrap Select CSS -->
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css" rel="stylesheet">
-		<!-- jQuery -->
-		<script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
-	</head>
-	<body class="hold-transition sidebar-mini layout-fixed">
-		<div class="wrapper">
-			@include('layouts.header')
-			@include('layouts.sidebar')
-			@yield('content')
-			@include('layouts.footer')
-			<aside class="control-sidebar control-sidebar-dark">
-			</aside>
-		</div>
-		<script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
-		<script> $.widget.bridge('uibutton', $.ui.button); </script>
-		<script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-		<script src="{{ asset('assets/plugins/chart.js/Chart.min.js') }}"></script>
-		<script src="{{ asset('assets/plugins/sparklines/sparkline.js') }}"></script>
-		<!-- <script src="{{ asset('assets/plugins/jqvmap/jquery.vmap.min.js') }}"></script> -->
-		<!-- <script src="{{ asset('assets/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script> -->
-		<script src="{{ asset('assets/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
-		<script src="{{ asset('assets/plugins/moment/moment.min.js') }}"></script>
-		<script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
-		<script src="{{ asset('assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-		<script src="{{ asset('assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
-		<script src="{{ asset('assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
-		<script src="{{ asset('assets/dist/js/adminlte.js') }}"></script>
-		<script src="{{ asset('assets/dist/js/pages/dashboard.js') }}"></script>
-		<script src="{{ asset('assets/dist/js/demo.js') }}"></script>
-		<script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
-			
-		<!-- Toaster -->
-		<script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
-		{!! Toastr::message() !!}
-		<link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
-		<!-- Toaster -->
-        <!-- DataTables -->
-		<link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
-<script src="{{asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script> 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
-<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-<!-- Select 2 -->
-<script src="{{asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>
-<script>
-      history.pushState(null, null, location.href);
-    window.onpopstate = function () {
-        history.go(1);
-    };</script>
-<script>
-    $(function () {
-      $(".table_data").DataTable({
-        "responsive": true,
-        "autoWidth": false,
-      });
-//       $("#example1").DataTable({
-//         "responsive": true,
-//         "autoWidth": false,
-// 		"searching": true,      
-// 		"paging": false,     
-// 		"pageLength": 100,     
-// 		"lengthMenu": [ [50, 75, 100], [50, 75, 100] ]
-//       });
+    <link href="{!! asset('theme/vendor/bootstrap/css/bootstrap.min.css') !!}" rel="stylesheet">
 
-      $('#example2').DataTable({
-        "autoWidth": false,
-        "responsive": true,
-      });
-      
-      $("#example11").DataTable({
-        "responsive": true,
-        "autoWidth": false,
-      });   
+    <!-- MetisMenu CSS -->
+    <link href="{!! asset('theme/vendor/metisMenu/metisMenu.min.css') !!}" rel="stylesheet">
 
-    });
+    <!-- Custom CSS -->
+    <link href="{!! asset('theme/dist/css/sb-admin-2.css') !!}" rel="stylesheet">
 
-  </script>
+    <!-- Morris Charts CSS -->
+    <link href="{!! asset('theme/vendor/morrisjs/morris.css') !!}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-
-
-
-
-  <style>
-div#example1_filter {
-    float: right;
-}
-div#export_filter {
-    float: right;
-}
-div#example11_filter {
-    float: right;
-}
-div#example1_paginate {
-    float: right;
-}
-div#export_paginate {
-    float: right;
-}
-div#example11_paginate {
-    float: right;
-}
-
-.add-button {
-    text-align: right;
-}
-
-.form-check {
-    padding-left: 2.25rem !important;
-}
-
-.table
-{
-word-wrap: break-word;
-word-break: break-all;  
-white-space: normal !important;
-text-align: justify;
-}
-
-
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    padding: 0px !important;
-}
-  </style>
-  
-    <script type="text/javascript">
-   
-
-function exportTableToExcel(tableID, filename, fn, dl) {
-       var elt = document.getElementById(tableID);
-       var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
-       return dl ?
-         XLSX.write(wb, { bookType: 'xlsx', bookSST: true, 'xlsx': 'base64' }):
-         XLSX.writeFile(wb, fn || (filename+'.xlsx' ));
-    }
-
-    function exportBiometricToExcel(tableID, filename, fn, dl)
+    <!-- Custom Fonts -->
+    <link href="{!! asset('theme/vendor/font-awesome/css/font-awesome.min.css') !!}" rel="stylesheet" type="text/css">
+    <style type="text/css">
+        body{
+            overflow-x: hidden;
+        }
+        #hidden{
+          display: none;
+        }
+    </style>
+    <style type="text/css" media="print">
+    @page 
     {
-        var elt = document.getElementById(tableID);
-       var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
-       console.log(elt,"wb");
-        return dl ?
-        XLSX.write(wb, { bookType: 'xlsx', bookSST: true, 'xlsx': 'base64' }):
-       XLSX.writeFile(wb, fn || (filename+'.xlsx' ));
-    
+        size: auto;   /* auto is the initial value */
+        margin: 0mm;  /* this affects the margin in the printer settings */
     }
-</script>
-	</body>
+</style>
+
+     <style>
+     @media print {
+    a[href]:after {
+        content: none !important;
+    }
+}
+
+        @media print {
+           #heading {
+                display: none;
+            }
+             .btn-primary {
+                display: none;
+            }
+            
+            #myTable, #myTable * {
+                visibility: visible;
+            }
+            
+            #myTable {
+                margin-top: 0;
+                padding-top: 0;
+            }
+            
+            #myTable td:last-child,
+            #myTable th:last-child {
+                display: none;
+            }
+            h1 {
+              display: none;
+            }
+
+            #logo {
+              text-align: center;
+              margin: 20px 0;
+            }
+        }
+    </style>
+
+
+</head>
+<body>
+    
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            @include('theme.header')
+            @include('theme.sidebar')
+        </nav>
+
+        <div id="page-wrapper">
+            @yield('content')
+        </div>
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>  
+    
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script>
+        function deleteHeading(value) {
+          if (confirm("Are you sure you want to delete?")) {
+            $.ajax({
+              type: 'get',
+              url: '{{ route('heading.delete') }}',
+              data: { id: value },
+              success: function(data) {
+                // Show success message
+                alert('heading deleted successfully.');
+
+                // Reload the current page
+                window.location.reload();
+              },
+              error: function(xhr, status, error) {
+                // Show error message
+                alert('Failed to delete heading.');
+
+                // Log the error to the console
+                console.error(error);
+              }
+            });
+          }
+        }
+    </script>
+    <script>
+        function deleteSubheading(value) {
+          if (confirm("Are you sure you want to delete?")) {
+            $.ajax({
+              type: 'get',
+              url: '{{ route('subheading.delete') }}',
+              data: { id: value },
+              success: function(data) {
+                // Show success message
+                alert('subheading deleted successfully.');
+
+                // Reload the current page
+                window.location.reload();
+              },
+              error: function(xhr, status, error) {
+                // Show error message
+                alert('Failed to delete subheading.');
+
+                // Log the error to the console
+                console.error(error);
+              }
+            });
+          }
+        }
+    </script>
+    
+    <script>
+          
+        function deleteDaybook(value) {
+          if (confirm("Are you sure you want to delete?")) {
+            $.ajax({
+              type: 'get',
+              url: '{{ route('daybook.delete') }}',
+              data: { id: value },
+              success: function(data) {
+                // Show success message
+                alert('Daybook deleted successfully.');
+
+                // Reload the current page
+                window.location.reload();
+              },
+              error: function(xhr, status, error) {
+                // Show error message
+                alert('Failed to delete Daybook.');
+
+                // Log the error to the console
+                console.error(error);
+              }
+            });
+          }
+        } 
+           
+        function deletegodownDaybook(value) {
+          if (confirm("Are you sure you want to delete?")) {
+            $.ajax({
+              type: 'get',
+              url: '{{ route('godown.delete') }}',
+              data: { id: value },
+              success: function(data) {
+                // Show success message
+                alert('GoDownDaybook deleted successfully.');
+
+                // Reload the current page
+                window.location.reload();
+              },
+              error: function(xhr, status, error) {
+                // Show error message
+                alert('Failed to delete GoDownDaybook.');
+
+                // Log the error to the console
+                console.error(error);
+              }
+            });
+          }
+        }
+           
+        function deleteonlineDaybook(value) {
+          if (confirm("Are you sure you want to delete?")) {
+            $.ajax({
+              type: 'get',
+              url: '{{ route('online.delete') }}',
+              data: { id: value },
+              success: function(data) {
+                // Show success message
+                alert('OnlineDaybook deleted successfully.');
+
+                // Reload the current page
+                window.location.reload();
+              },
+              error: function(xhr, status, error) {
+                // Show error message
+                alert('Failed to delete OnlineDaybook.');
+
+                // Log the error to the console
+                console.error(error);
+              }
+            });
+          }
+        }
+    </script>
+</body>
 </html>
