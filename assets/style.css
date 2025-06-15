@@ -1,0 +1,9 @@
+
+.starRating{ margin: 0 auto; }
+.starRating span{ display: inline-block; vertical-align: middle; line-height: 15px; font-size: 14px; color:#a3a2a2; font-family: 'Roboto', sans-serif; }
+.starRating::before{ content: ''; background: url(images/icons.png) no-repeat 0 -96px; display: inline-block; vertical-align: middle; width:86px; height: 15px; margin-right: 5px; }
+.starRating.star_1::before{ background-position:0 -111px; }
+.starRating.star_2::before{ background-position:0 -125px; }
+.starRating.star_3::before{ background-position:0 -140px; }
+.starRating.star_4::before{ background-position:0 -155px; }
+.starRating.star_5::before{ background-position:0 -170px; }
